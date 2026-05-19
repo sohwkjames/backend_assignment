@@ -1,10 +1,67 @@
-To run the api:
+## Endpoints
 
-1. First, build the docker image. `docker build -t book-api .`
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/books/{id}` | Get a book by ID |
+| POST | `/api/books` | Add a new book |
+| DELETE | `/api/books/{id}` | Delete a book by ID |
 
-2. Run the container `docker run -p 8080:8080 book-api`
+Data is loaded from a JSON file (`books.json`) into memory on application startup — no database is used.
 
-3. Hit the endpoints as usual via cURL, Postman etc.  `curl http://localhost:8080/api/books`
+---
 
+--- 
 
+## Request Logging
 
+All incoming HTTP requests and responses are logged.
+
+---
+
+## Request Validation
+
+Incoming requests for `POST` and `DELETE` are validated before any processing occurs.
+
+For `POST`, the following fields are required:
+- `title` — must not be blank
+- `author` — must not be blank
+- `genre` — must not be blank
+- `publishedDate` — must not be null and cannot be a future date
+
+For `DELETE`, the provided ID is checked against the in-memory list. If no matching book is found, a `404` is returned.
+
+Validation is handled by a dedicated `BookValidatorImpl` service
+
+---
+
+---
+
+## Unit Tests
+
+Unit tests for the endpoints are in place as well. Run the unit tests with `./mvnw test`
+
+---
+
+## Dependency Injection
+
+This project demonstrates dependency injection through two mechanisms:
+
+**1. BookValidator injection**
+
+`BookValidator` is injected into `BookService` via constructor injection. 
+
+**2. Strategy pattern**
+
+`BookProcessor` is an interface with multiple implementations (`SanitisingBookProcessor`, `EnrichingBookProcessor`). The caller specifies which processor to apply per request via a `processorType` query parameter, defaulting to `sanitising`. This demonstrates runtime strategy selection driven by the incoming request, with all processor implementations remaining active simultaneously.
+
+--- 
+
+## Running Locally
+
+```bash
+# build and run with Maven wrapper
+./mvnw spring-boot:run
+
+# or build and run with Docker
+docker build -t book-api .
+docker run -p 8080:8080 book-api
