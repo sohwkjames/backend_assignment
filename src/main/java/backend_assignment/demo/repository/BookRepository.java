@@ -17,6 +17,7 @@ import tools.jackson.databind.ObjectMapper;
 public class BookRepository {
     private final List<Book> books = new ArrayList<Book>();
     private final ObjectMapper objectMapper;
+    private int nextId = 1;
 
     public BookRepository(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -27,7 +28,9 @@ public class BookRepository {
     public void load() throws Exception {
         InputStream is = new ClassPathResource("books.json").getInputStream();
         List<Book> loaded = objectMapper.readValue(is, new TypeReference<List<Book>>() {});
+        
         books.addAll(loaded);
+        nextId = books.size() + 1; // start after the preloaded data
     }
     
     public List<Book> getBooks() {
@@ -41,6 +44,7 @@ public class BookRepository {
     }
     
     public Book addBook(Book book) {
+        book.setId(String.valueOf(nextId++));
         books.add(book);
         return book;
     }
