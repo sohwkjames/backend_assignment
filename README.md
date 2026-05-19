@@ -1,3 +1,5 @@
+The application is currently deployed to AWS elastic beanstalk. GET http://book-api-env.eba-gam7exmu.ap-southeast-1.elasticbeanstalk.com/api/books for a health check.
+
 ## Endpoints
 
 | Method | Endpoint | Description |
@@ -56,6 +58,7 @@ This project demonstrates dependency injection through two mechanisms:
 
 --- 
 
+
 ## Running Locally
 
 ```bash
@@ -65,3 +68,9 @@ This project demonstrates dependency injection through two mechanisms:
 # or build and run with Docker
 docker build -t book-api .
 docker run -p 8080:8080 book-api
+
+---
+
+## Branching Strategy
+The pipeline to build and test is fired when a PR is made from a branch to main. Tests need to pass before branches can be merged to main.
+
