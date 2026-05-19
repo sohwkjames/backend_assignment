@@ -10,6 +10,33 @@ The application is currently deployed to AWS elastic beanstalk. GET http://book-
 
 Data is loaded from a JSON file (`books.json`) into memory on application startup — no database is used.
 
+Sample add new book request 
+
+curl --request POST \
+  --url http://localhost:8080/api/books \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/12.5.0' \
+  --cookie JSESSIONID=F21FA8231EA13E8D77776515F445A6F9 \
+  --data '{
+		"title": "Learn Cooking       ",
+		"author": "Gordon Ramsay",
+		"genre": "Non Fiction",
+		"publishedDate": "2024-02-03"
+}'
+
+Sample add book with processor type specified request
+
+curl --request POST \
+  --url 'http://localhost:8080/api/books?processorType=enriching' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/12.5.0' \
+  --cookie JSESSIONID=F21FA8231EA13E8D77776515F445A6F9 \
+  --data '{
+		"title": "History of Singapore",
+		"author": "Mark Tan",
+		"genre": "Non Fiction",
+		"publishedDate": "2022-01-11"
+}'
 ---
 
 --- 
