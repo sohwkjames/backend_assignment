@@ -23,6 +23,7 @@ public class BookController {
 	@Autowired
 	BookService bookService; 
 
+	// This endpoint is just for debugging and demo purposes, not a requirement
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getBooks());
@@ -33,14 +34,11 @@ public class BookController {
     public ResponseEntity<Book> getBookById(@PathVariable String id) {
         return ResponseEntity.ok(bookService.getBook(id));
     }
-
-//    @PostMapping
-//    public ResponseEntity<Book> addBook(@RequestBody Book book, 
-//    		@RequestParam(value = "processorType", defaultValue = "sanitising") String processorType) {
-//        Book saved = bookService.addBook(book, processorType);
-//        return ResponseEntity.status(201).body(saved);
-//    }
     
+    // the processorType is to showcase how we use 
+    // dependency injection at runtime. Consumers can specify what processor strategy
+    // they want in the request. See BookProcessor for more.
+    // We also provide default value because user will probably forget to input.
     @PostMapping
     public ResponseEntity<Book> addBook(
             @RequestBody Book book,
